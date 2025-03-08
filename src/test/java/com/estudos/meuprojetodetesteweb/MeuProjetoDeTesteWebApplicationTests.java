@@ -38,6 +38,7 @@ class MeuProjetoDeTesteWebApplicationTests {
 		CustomerOut customerOut = new CustomerOut();
 		customerOut.setCpf("333.123.123-50");
 		customerOut.setNome("Maria Joaquina");
+		customerOut.setCep("31091-100");
 
 		RestAssured.given()
 						.contentType(ContentType.JSON)
@@ -68,6 +69,7 @@ class MeuProjetoDeTesteWebApplicationTests {
 		CustomerOut customerOut = new CustomerOut();
 		customerOut.setCpf("333.123.123");
 		customerOut.setNome("Maria Joaquina");
+		customerOut.setCep("31091-100");
 
 		RestAssured.given()
 						.contentType(ContentType.JSON)
