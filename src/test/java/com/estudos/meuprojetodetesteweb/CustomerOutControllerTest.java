@@ -1,6 +1,6 @@
 package com.estudos.meuprojetodetesteweb;
 
-import com.estudos.meuprojetodetesteweb.model.Customer;
+import com.estudos.meuprojetodetesteweb.dto.CustomerIn;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CustomerControllerTest {
+public class CustomerOutControllerTest {
 
     @LocalServerPort
     private int portaUsada;
@@ -30,25 +30,25 @@ public class CustomerControllerTest {
      */
     @Test
     public void salvarCustomerFluxoPrincipal(){
-        Customer customer = new Customer();
-        customer.setNome("Maria Joaquina de Amaral Pereira Goes");
-        customer.setCpf("872.234.532-23");
-        customer.setCep("52123-012");
-        customer.setEndereco("Av Boa viagem, 123");
+        CustomerIn customerIn = new CustomerIn();
+        customerIn.setNome("Maria Joaquina de Amaral Pereira Goes");
+        customerIn.setCpf("872.234.532-23");
+        customerIn.setCep("52123-012");
+        customerIn.setEndereco("Av Boa viagem, 123");
 
         RestAssured
                 .given()
                     .contentType(ContentType.JSON)
-                    .body(customer)
+                    .body(customerIn)
                 .when()
                     .request("POST", "/customer")
                 .then()
                     .statusCode(201)
                     .body("cpf", equalTo("872.234.532-23"))
                     .body("nome", equalTo("Maria Joaquina de Amaral Pereira Goes"))
-                    .body("salvo", equalTo(Boolean.TRUE))
                     .body("cep", equalTo("52123-012"))
-                    .body("endereco", equalTo("Av Boa viagem, 123"));
+                    .body("endereco", equalTo("Av Boa viagem, 123"))
+                    .body("salvo", equalTo(Boolean.TRUE));
 
     }
 
@@ -62,14 +62,14 @@ public class CustomerControllerTest {
      */
     @Test
     public void salvarCustomerFluxoPrincipalSemEnderecoPreenchido(){
-        Customer customer = new Customer();
-        customer.setNome("Seu amaro");
-        customer.setCpf("222.111.333-14");
-        customer.setCep("35121-091");
+        CustomerIn customerIn = new CustomerIn();
+        customerIn.setNome("Seu amaro");
+        customerIn.setCpf("222.111.333-14");
+        customerIn.setCep("35121-091");
 
         RestAssured
                 .given()
-                    .body(customer)
+                    .body(customerIn)
                     .contentType(ContentType.JSON)
                 .when()
                     .request("POST", "/customer")
@@ -77,9 +77,9 @@ public class CustomerControllerTest {
                     .statusCode(HttpStatus.CREATED.value())
                     .body("cpf", equalTo("222.111.333-14"))
                     .body("nome", equalTo("Seu amaro"))
-                    .body("salvo", equalTo(Boolean.TRUE))
                     .body("cep", equalTo("35121-091"))
-                    .body("endereco", equalTo("Rua bla bla bla"));
+                    .body("endereco", equalTo("Rua bla bla bla"))
+                    .body("salvo", equalTo(Boolean.TRUE));
     }
 
     /*
@@ -91,15 +91,15 @@ public class CustomerControllerTest {
      */
     @Test
     public void salvarCustomerFluxoCPfDiferente14Caracteres(){
-        Customer customer = new Customer();
-        customer.setNome("Seu paulo");
-        customer.setCpf("222");
-        customer.setCep("35121-091");
+        CustomerIn customerIn = new CustomerIn();
+        customerIn.setNome("Seu paulo");
+        customerIn.setCpf("222");
+        customerIn.setCep("35121-091");
 
         RestAssured
                 .given()
                     .contentType(ContentType.JSON)
-                    .body(customer)
+                    .body(customerIn)
                 .when()
                     .request("POST", "/customer")
                 .then()
@@ -115,14 +115,14 @@ public class CustomerControllerTest {
      */
     @Test
     public void salvarCustomerFluxoCEPNaoPreenchido(){
-        Customer customer = new Customer();
-        customer.setNome("Maria Joaquina");
-        customer.setCpf("123.123.123-12");
+        CustomerIn customerIn = new CustomerIn();
+        customerIn.setNome("Maria Joaquina");
+        customerIn.setCpf("123.123.123-12");
 
         RestAssured
                 .given()
                     .contentType(ContentType.JSON)
-                    .body(customer)
+                    .body(customerIn)
                 .when()
                     .request("POST", "/customer")
                 .then()
@@ -138,14 +138,14 @@ public class CustomerControllerTest {
      */
     @Test
     public void salvarCustomerFluxoNomeNaoPreenchido(){
-        Customer customer = new Customer();
-        customer.setCpf("123.123.222-33");
-        customer.setCep("32112-123");
+        CustomerIn customerIn = new CustomerIn();
+        customerIn.setCpf("123.123.222-33");
+        customerIn.setCep("32112-123");
 
         RestAssured
                 .given()
                     .contentType(ContentType.JSON)
-                    .body(customer)
+                    .body(customerIn)
                 .when()
                     .request("POST", "/customer")
                 .then()
@@ -161,14 +161,14 @@ public class CustomerControllerTest {
      */
     @Test
     public void salvarCustomerFluxoCpfNaoPreenchido(){
-        Customer customer = new Customer();
-        customer.setNome("Maria joaquina");
-        customer.setCep("50123-445");
+        CustomerIn customerIn = new CustomerIn();
+        customerIn.setNome("Maria joaquina");
+        customerIn.setCep("50123-445");
 
         RestAssured
                 .given()
                     .contentType(ContentType.JSON)
-                    .body(customer)
+                    .body(customerIn)
                 .when()
                     .request("POST", "/customer")
                 .then()

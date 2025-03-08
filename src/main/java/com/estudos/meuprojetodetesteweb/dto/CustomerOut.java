@@ -1,4 +1,4 @@
-package com.estudos.meuprojetodetesteweb.model;
+package com.estudos.meuprojetodetesteweb.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -8,12 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class CustomerOut {
     private String cpf;
     private String nome;
-    private Boolean salvo;
     private String cep;
     private String endereco;
-
-
+    private Boolean salvo;
 }

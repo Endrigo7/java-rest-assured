@@ -1,18 +1,19 @@
 package com.estudos.meuprojetodetesteweb.repository;
 
-import com.estudos.meuprojetodetesteweb.model.Customer;
+import com.estudos.meuprojetodetesteweb.dto.CustomerIn;
+import com.estudos.meuprojetodetesteweb.dto.CustomerOut;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CustomerDaoAbstract {
 
-    protected final List<Customer> customers = new ArrayList<>();
+    protected final List<CustomerIn> customerIns = new ArrayList<>();
 
-    public void salvar(Customer customer) {
-        customers.add(customer);
+    public void salvar(CustomerIn customerIn) {
+        customerIns.add(customerIn);
     }
 
-    public abstract Customer consultar(String cpf);
+    public abstract CustomerIn consultar(String cpf);
 
 }

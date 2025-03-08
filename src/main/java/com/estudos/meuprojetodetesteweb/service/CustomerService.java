@@ -1,6 +1,7 @@
 package com.estudos.meuprojetodetesteweb.service;
 
-import com.estudos.meuprojetodetesteweb.model.Customer;
+import com.estudos.meuprojetodetesteweb.dto.CustomerIn;
+import com.estudos.meuprojetodetesteweb.dto.CustomerOut;
 import com.estudos.meuprojetodetesteweb.repository.CustomerDaoSQLServer;
 import com.estudos.meuprojetodetesteweb.resources.CepService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +19,38 @@ public class CustomerService {
     @Autowired
     private CepService cepService;
 
-    public Customer salvar(Customer customer){
-        customerValidator.valida(customer);
+    public CustomerOut salvar(CustomerIn customerIn){
+        customerValidator.valida(customerIn);
 
-        if(customer.getEndereco() == null) {
-            String endereco = cepService.consultaEnderecoPorCep(customer.getCep());
-            customer.setEndereco(endereco);
+        if(customerIn.getEndereco() == null) {
+            String endereco = cepService.consultaEnderecoPorCep(customerIn.getCep());
+            customerIn.setEndereco(endereco);
         }
 
-        customer.setSalvo(true);
-        customerDaoSQLServer.salvar(customer);
 
-        return customer;
+        customerDaoSQLServer.salvar(customerIn);
+
+        CustomerOut customerOut = new CustomerOut();
+        customerOut.setCpf(customerIn.getCpf());
+        customerOut.setNome(customerIn.getNome());
+        customerOut.setCep(customerIn.getCep());
+        customerOut.setEndereco(customerIn.getEndereco());
+        customerOut.setSalvo(Boolean.TRUE);
+
+        return customerOut;
     }
 
-    public Customer consultar(String cpf){
-        return customerDaoSQLServer.consultar(cpf);
+    public CustomerOut consultar(String cpf){
+        CustomerIn customerIn = customerDaoSQLServer.consultar(cpf);
+
+        CustomerOut customerOut = new CustomerOut();
+        customerOut.setCpf(customerIn.getCpf());
+        customerOut.setNome(customerIn.getNome());
+        customerOut.setCep(customerIn.getCep());
+        customerOut.setEndereco(customerIn.getEndereco());
+        customerOut.setSalvo(Boolean.TRUE);
+
+        return customerOut;
     }
 
 }

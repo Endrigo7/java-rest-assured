@@ -1,6 +1,6 @@
 package com.estudos.meuprojetodetesteweb;
 
-import com.estudos.meuprojetodetesteweb.model.Customer;
+import com.estudos.meuprojetodetesteweb.dto.CustomerOut;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MeuProjetoDeTesteWebApplicationTests {
@@ -36,13 +35,13 @@ class MeuProjetoDeTesteWebApplicationTests {
 	 */
 	@Test
 	public void dadoUmClienteComDadosValidosEntaoOClienteDeveSerSalvo(){
-		Customer customer = new Customer();
-		customer.setCpf("333.123.123-50");
-		customer.setNome("Maria Joaquina");
+		CustomerOut customerOut = new CustomerOut();
+		customerOut.setCpf("333.123.123-50");
+		customerOut.setNome("Maria Joaquina");
 
 		RestAssured.given()
 						.contentType(ContentType.JSON)
-						.body(customer)
+						.body(customerOut)
 					.when()
 						.request("POST", "customer")
 					.then()
@@ -66,13 +65,13 @@ class MeuProjetoDeTesteWebApplicationTests {
 	 * */
 	@Test
 	public void dadoUmClienteComCamposPreenchidosPoremCpfInvalidoEntaoDeveRetonarErro(){
-		Customer customer = new Customer();
-		customer.setCpf("333.123.123");
-		customer.setNome("Maria Joaquina");
+		CustomerOut customerOut = new CustomerOut();
+		customerOut.setCpf("333.123.123");
+		customerOut.setNome("Maria Joaquina");
 
 		RestAssured.given()
 						.contentType(ContentType.JSON)
-						.body(customer)
+						.body(customerOut)
 					.when()
 						.request("POST", "/customer")
 					.then()
