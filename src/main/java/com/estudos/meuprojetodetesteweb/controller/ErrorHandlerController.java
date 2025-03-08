@@ -1,6 +1,7 @@
 package com.estudos.meuprojetodetesteweb.controller;
 
 
+import com.estudos.meuprojetodetesteweb.exceptions.CPFNotFoundException;
 import com.estudos.meuprojetodetesteweb.exceptions.CamposObrigatoriosNaoPreenchidosException;
 import com.estudos.meuprojetodetesteweb.exceptions.CpfInvalidoException;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,12 @@ public class ErrorHandlerController {
     public ResponseEntity<Object> trataErroCamposObrigatoriosNaoPreenchidos(Exception ex, WebRequest request){
         return new ResponseEntity<Object>(
                 ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CPFNotFoundException.class)
+    public ResponseEntity<Object> trataCpfNotFound(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(
+                ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
 }

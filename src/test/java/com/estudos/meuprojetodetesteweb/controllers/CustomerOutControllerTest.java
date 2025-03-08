@@ -1,10 +1,12 @@
-package com.estudos.meuprojetodetesteweb;
+package com.estudos.meuprojetodetesteweb.controllers;
 
 import com.estudos.meuprojetodetesteweb.dto.CustomerIn;
+import com.estudos.meuprojetodetesteweb.util.FuncoesUteis;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CustomerOutControllerTest {
+
+    @Autowired
+    private FuncoesUteis funcoesUteis;
 
     @LocalServerPort
     private int portaUsada;
@@ -43,7 +48,7 @@ public class CustomerOutControllerTest {
                 .when()
                     .request("POST", "/customer")
                 .then()
-                    .statusCode(201)
+                    .statusCode(HttpStatus.CREATED.value())
                     .body("cpf", equalTo("872.234.532-23"))
                     .body("nome", equalTo("Maria Joaquina de Amaral Pereira Goes"))
                     .body("cep", equalTo("52123-012"))
@@ -174,6 +179,49 @@ public class CustomerOutControllerTest {
                 .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
                     .body(equalTo("CPF deve ser informado"));
+    }
+
+    /*
+     * DADO que o CPF preenchido existe na banco de dados
+     * QUANDO chamar o endpoint customer/{CPF} (GET)
+     * ENTAO deve retornar as informações do CUSTOMER
+     * E status 200.
+     */
+    @Test
+    public void consultaCustomerPorCPFFluxoPrincipal(){
+        funcoesUteis.insereCustomerQueDeveSerRetornado();
+
+        RestAssured
+                .given()
+                .when()
+                    .request("GET", "/customer/132.123.003-71")
+                .then()
+                    .statusCode(HttpStatus.OK.value())
+                .body("cpf", equalTo("132.123.003-71"))
+                .body("nome", equalTo("Maria joaquina"))
+                .body("cep", equalTo("50123-445"))
+                .body("endereco", equalTo("Av Rui Barbosa, 123"))
+                .body("salvo", equalTo(Boolean.TRUE));
+
+    }
+
+    /*
+     * DADO que o CPF preenchido NÃO existe no banco de dados
+     * QUANDO chamar o endpoint customer/{CPF} (GET)
+     * ENTAO deve retornar status 404
+     * E mensagem “O cpf {CPF} não foi encontrado no banco de dados!!!!”.
+     */
+    @Test
+    public void consultaCustomerFluxoCPFNaoEncontrado(){
+
+        RestAssured
+                .given()
+                .when()
+                    .request("GET", "/customer/123.123.000-00")
+                .then()
+                    .statusCode(HttpStatus.NOT_FOUND.value())
+                    .body(equalTo("O cpf 123.123.000-00 não foi encontrado no banco de dados!!!!"));
+
     }
 
 }

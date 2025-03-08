@@ -38,5 +38,4 @@ public class CustomerController {
 
         return ResponseEntity.ok(customerOut);
     }
-
 }

@@ -1,7 +1,7 @@
 package com.estudos.meuprojetodetesteweb.repository;
 
 import com.estudos.meuprojetodetesteweb.dto.CustomerIn;
-import com.estudos.meuprojetodetesteweb.dto.CustomerOut;
+import com.estudos.meuprojetodetesteweb.exceptions.CPFNotFoundException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -12,6 +12,8 @@ public class CustomerDaoSQLServer extends CustomerDaoAbstract{
         return customerIns.stream()
                 .filter(customer -> customer.getCpf().equals(cpf))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(
+                        () -> new CPFNotFoundException("O cpf " + cpf + " não foi encontrado no banco de dados!!!!")
+                );
     }
 }
