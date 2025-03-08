@@ -1,7 +1,8 @@
 package com.estudos.meuprojetodetesteweb.controller;
 
 
-import com.estudos.meuprojetodetesteweb.model.Customer;
+import com.estudos.meuprojetodetesteweb.dto.CustomerIn;
+import com.estudos.meuprojetodetesteweb.dto.CustomerOut;
 import com.estudos.meuprojetodetesteweb.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,20 +23,20 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<Customer> salvar(@RequestBody Customer customer) {
-        customerService.salvar(customer);
+    public ResponseEntity<CustomerOut> salvar(@RequestBody CustomerIn customerIn) {
+        CustomerOut customerOut = customerService.salvar(customerIn);
 
-        URI uri = URI.create("localhost:8080/customer/" + customer.getCpf());
+        URI uri = URI.create("localhost:8080/customer/" + customerOut.getCpf());
 
-        return ResponseEntity.created(uri).body(customer);
+        return ResponseEntity.created(uri).body(customerOut);
 
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<Customer> consultarPorCpf(@PathVariable("cpf") String cpf) {
-        Customer customer = customerService.consultar(cpf);
+    public ResponseEntity<CustomerOut> consultarPorCpf(@PathVariable("cpf") String cpf) {
+        CustomerOut customerOut = customerService.consultar(cpf);
 
-        return ResponseEntity.ok(customer);
+        return ResponseEntity.ok(customerOut);
     }
 
 }

@@ -23,6 +23,36 @@ public class CustomerControllerTest {
     }
 
     /*
+     * DADO nome, CPF, CEP e Endereco preenchidos
+     * QUANDO chamar endpoint customer(POST)
+     * ENTAO Salvar o cliente
+     * E retornar o status 201
+     */
+    @Test
+    public void salvarCustomerFluxoPrincipal(){
+        Customer customer = new Customer();
+        customer.setNome("Maria Joaquina de Amaral Pereira Goes");
+        customer.setCpf("872.234.532-23");
+        customer.setCep("52123-012");
+        customer.setEndereco("Av Boa viagem, 123");
+
+        RestAssured
+                .given()
+                    .contentType(ContentType.JSON)
+                    .body(customer)
+                .when()
+                    .request("POST", "/customer")
+                .then()
+                    .statusCode(201)
+                    .body("cpf", equalTo("872.234.532-23"))
+                    .body("nome", equalTo("Maria Joaquina de Amaral Pereira Goes"))
+                    .body("salvo", equalTo(Boolean.TRUE))
+                    .body("cep", equalTo("52123-012"))
+                    .body("endereco", equalTo("Av Boa viagem, 123"));
+
+    }
+
+    /*
      * DADO nome, CPF e CEP preenchidos
      * QUANDO chamar endpoint customer(POST)
      * ENTAO deve consultar o CEP
@@ -31,7 +61,7 @@ public class CustomerControllerTest {
      * E retornar o status 201
      */
     @Test
-    public void salvarCustomerFluxoPrincipal(){
+    public void salvarCustomerFluxoPrincipalSemEnderecoPreenchido(){
         Customer customer = new Customer();
         customer.setNome("Seu amaro");
         customer.setCpf("222.111.333-14");
@@ -45,6 +75,10 @@ public class CustomerControllerTest {
                     .request("POST", "/customer")
                 .then()
                     .statusCode(HttpStatus.CREATED.value())
+                    .body("cpf", equalTo("222.111.333-14"))
+                    .body("nome", equalTo("Seu amaro"))
+                    .body("salvo", equalTo(Boolean.TRUE))
+                    .body("cep", equalTo("35121-091"))
                     .body("endereco", equalTo("Rua bla bla bla"));
     }
 
