@@ -1,4 +1,4 @@
-# Cenários de Testes ( BDD )
+# Cenários de Testes (BDD)
 
 ## POST /customer
 
@@ -11,7 +11,7 @@ Quando enviar um POST para /customer com todos os campos válidos
 Então a resposta deve retornar status 201 Created
 E o corpo da resposta deve conter os dados do cliente criado
 E o campo salvo deve retornar true
-E o header Location deve conter: http://localhost:8080/customer/{cpf-informado-no-request}
+E o header Location deve conter: /customer/{cpf-informado-no-request}
 ```
 
 #### Caso 2: Criar cliente sem CPF
@@ -200,7 +200,7 @@ Então a resposta deve retornar status 400 Bad Request
 E a mensagem de erro deve indicar que o endereço não pode ter mais de 255 caracteres
 ```
 
-#### Caso 22: Endereço com exatamente 255 caracteres
+#### Caso 24: Endereço com exatamente 255 caracteres
 ```gherkin
 Dado que um cliente deseja criar uma nova conta
 Quando enviar um POST para /customer com endereço contendo exatamente 255 caracteres
@@ -208,7 +208,7 @@ Então a resposta deve retornar status 201 Created
 E o cliente deve ser criado com sucesso
 ```
 
-#### Caso 23: Endereço vazio
+#### Caso 25: Endereço vazio
 ```gherkin
 Dado que um cliente deseja criar uma nova conta
 Quando enviar um POST para /customer com endereço vazio
@@ -220,7 +220,7 @@ E a mensagem de erro deve indicar que o Endereço é obrigatório
 
 ### Validação de Consulta
 
-#### Caso 27: Consultar cliente existente por CPF
+#### Caso 1: Consultar cliente existente por CPF
 ```gherkin
 Dado que existe um cliente cadastrado no sistema
 Quando enviar um GET para /customer/{cpf} com um CPF válido
@@ -228,7 +228,7 @@ Então a resposta deve retornar status 200 OK
 E o corpo da resposta deve conter os dados completos do cliente
 ```
 
-#### Caso 28: Consultar cliente inexistente
+#### Caso 2: Consultar cliente inexistente
 ```gherkin
 Dado que não existe um cliente cadastrado com um determinado CPF
 Quando enviar um GET para /customer/{cpf} com um CPF que não existe
@@ -236,7 +236,7 @@ Então a resposta deve retornar status 404 Not Found
 E a mensagem de erro deve indicar que o cliente não foi encontrado
 ```
 
-#### Caso 29: Consultar com CPF em formato inválido
+#### Caso 3: Consultar com CPF em formato inválido
 ```gherkin
 Dado que um cliente deseja consultar um cliente
 Quando enviar um GET para /customer/{cpf} com CPF em formato inválido
